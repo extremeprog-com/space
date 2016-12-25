@@ -1,0 +1,6 @@
+#!/bin/bash
+
+mkdir -p ./space/root/app
+
+rsync -r --exclude='.git' --exclude='platforms' --exclude='plugins' --exclude='node_modules' --exclude='containers' --delete-excluded ../ ./space/root/app
+
