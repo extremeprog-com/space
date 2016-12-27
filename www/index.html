@@ -3,8 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <title>Space notes for our deep minds' thoughts.</title>
-</head>
-<body>
+    <link rel="stylesheet" href="css/style.min.css">
 
+    <script src="http://msa.trean.extremeprog.com/mongoSitesApi.js?site=space"></script>
+    <script src="/js/angular.min.js" charset="utf-8"></script>
+    <script src="/js/angular-route.min.js"></script>
+    <!--<script src="/js/angular-sanitize.min.js"></script>-->
+    <script src="http://msa.trean.extremeprog.com/mongoSitesApi.angular.js?site=space"></script>
+
+    <script src="/js/app.js" language="javascript" type="text/javascript"></script>
+
+    <script src="/js/user-model.js" language="javascript" type="text/javascript"></script>
+    <script src="/js/section-model.js" language="javascript" type="text/javascript"></script>
+    <script src="/js/subsection-model.js" language="javascript" type="text/javascript"></script>
+    <script src="/js/note-model.js" language="javascript" type="text/javascript"></script>
+
+    <script src="/js/main-controller.js" language="javascript" type="text/javascript"></script>
+    <script src="/js/tab-controller.js" language="javascript" type="text/javascript"></script>
+    <script src="/js/subtab-controller.js" language="javascript" type="text/javascript"></script>
+
+</head>
+<body ng-app="space">
+<div class="wrapper" ng-controller="MainCtrl" ng-init="initApp()">
+    <header class="header">
+        <div class="header__user">{{ user.email }}</div>
+        <div class="header__logout" ng-click="user.logout($event)">logout</div>
+    </header>
+    <div class="workspace" ng-controller="TabController as tab">
+        <div class="sections">
+            <ul class="sections__list js-sections">
+                <li><span ng-click="addSection(user.email)">Add section</span></li>
+                <li class="sections__item js-li" ng-class="{ active: isSet($index + 1) }" ng-repeat="sectionName in section.list track by $index">
+                    <a href="#" ng-click="tab.setTab($index + 1)">{{ sectionName }}</a>
+                </li>
+            </ul>
+        </div>
+
+
+        <div ng-controller="SubTabController as subtab">
+            <div class="subsections" ng-repeat="sectionContent in section.list track by $index" ng-show="tab.isSet($index + 1)">
+                {{ sectionContent }}
+                <!-- here will be list of subsections' tabs -->
+
+                <ul class="subsections__list js-sections">
+                    <li><span ng-click="addSection(user.email)">Add section</span></li>
+                    <li class="subsections__item js-li" ng-class="{ active: subtab.isSet($index + 1) }" ng-repeat="sectionName in section.list track by $index">
+                        <a href="#" ng-click="subtab.setTab($index + 1)">{{ sectionName }}</a>
+                    </li>
+                </ul>
+
+                <!-- here will be content of subsection -->
+
+                <div class="subsections" ng-repeat="sectionContent in section.list track by $index" ng-show="subtab.isSet($index + 1)">
+                    {{ sectionContent }}
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="http://localhost:35729/livereload.js"></script>
 </body>
 </html>

@@ -1,0 +1,10 @@
+.sections {
+  width: 30%;
+  &__list {}
+  &__item {
+    display: inline-block;
+    width: calc(100% - 1em);
+    padding: 0.5em;
+    border-bottom: 1px solid #888;
+  }
+}

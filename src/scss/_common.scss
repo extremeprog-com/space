@@ -1,0 +1,81 @@
+body {
+  font-family: 'Helvetica';
+  font-size: 16px;
+  color: #222;
+  padding: 0;
+  margin: 0;
+}
+h1, h2, h3 {
+  margin-bottom: 1.7em;
+}
+mark {
+  background: #F9EB7F;
+}
+.mb {
+  margin-bottom: 2em;
+}
+.ml {
+  margin-left: 0.8em;
+}
+
+.header {
+  display: flex;
+  justify-content: flex-end;
+  background: #000000;
+  padding: 1em 1em;
+  color: #ffffff;
+  font-size: 0.9em;
+  &__user {
+    margin-right: 5em;
+  }
+  &__logout {
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.workspace {
+  display: flex;
+}
+
+.hidden {
+  display: none;
+}
+.copy {
+  font-size: 0.7em;
+  text-align: right;
+  position: absolute;
+  bottom: 1em;
+  right: 2em;
+}
+
+.link {
+  color: #222222;
+  &_dashed {
+    text-decoration: none;
+    border-bottom: 1px dashed #222222;
+    &:hover {
+      color: #fff;
+      background: #888;
+      transition: 250ms;
+    }
+  }
+}
+
+
+@mixin button {
+  border: 3px solid #222222;
+  font-size: 0.8em;
+  font-weight: 600;
+  background: transparent;
+  padding: 0.5rem 1rem;
+  margin-right: 0.5rem;
+  cursor: pointer;
+  transition: 150ms;
+  &:hover {
+    background: #222222;
+    color: #fff;
+  }
+}
