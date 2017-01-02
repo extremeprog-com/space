@@ -1,0 +1,32 @@
+.sections {
+  width: 30%;
+  &__list {
+    padding: 0;
+    margin: 0;
+  }
+  &__add {
+    display: inline-block;
+    width: calc(100% - 2em);
+    padding: 1em;
+    border-bottom: 1px solid #c0c0c0;
+    color: #9f9f9f;
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+      color: darken(#c0c0c0, 40%);
+    }
+  }
+  &__item {
+    display: inline-block;
+    width: calc(100% - 2em);
+    padding: 1em;
+    border-bottom: 1px solid #c0c0c0;
+    & > a {
+      color: inherit;
+      text-decoration: none;
+      &:active {
+        color: #940614;
+      }
+    }
+  }
+}

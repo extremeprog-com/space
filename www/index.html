@@ -29,36 +29,37 @@
         <div class="header__user">{{ user.email }}</div>
         <div class="header__logout" ng-click="user.logout($event)">logout</div>
     </header>
+
     <div class="workspace" ng-controller="TabController as tab">
+
         <div class="sections">
             <ul class="sections__list js-sections">
-                <li><span ng-click="addSection(user.email)">Add section</span></li>
-                <li class="sections__item js-li" ng-class="{ active: isSet($index + 1) }" ng-repeat="sectionName in section.list track by $index">
-                    <a href="#" ng-click="tab.setTab($index + 1)">{{ sectionName }}</a>
+                <li class="sections__add"><span ng-click="addSection(user.email)">Add section</span></li>
+                <li class="sections__item js-li" ng-repeat="(key, value) in data track by $index">
+                    <a href="#" ng-class="{ 'active': isSet($index + 1) }" ng-click="tab.setTab($index + 1)">{{ value.name }}</a>
                 </li>
             </ul>
         </div>
 
 
-        <div ng-controller="SubTabController as subtab">
-            <div class="subsections" ng-repeat="sectionContent in section.list track by $index" ng-show="tab.isSet($index + 1)">
-                {{ sectionContent }}
-                <!-- here will be list of subsections' tabs -->
+        <div ng-controller="SubTabController as subtab" class="subsections" ng-repeat="(key, value) in data track by $index" ng-show="tab.isSet($index + 1)">
+            <!-- here will be list of subsections' tabs -->
 
-                <ul class="subsections__list js-sections">
-                    <li><span ng-click="addSection(user.email)">Add section</span></li>
-                    <li class="subsections__item js-li" ng-class="{ active: subtab.isSet($index + 1) }" ng-repeat="sectionName in section.list track by $index">
-                        <a href="#" ng-click="subtab.setTab($index + 1)">{{ sectionName }}</a>
+            <div class="subsections__wrapper">
+                <ul class="subsections__list js-subsections">
+                    <li ng-repeat="subs in value" class="subsections__item js-li" ng-class="{ active: subtab.isSet($index + 1) }">
+                        <a href="#" ng-click="subtab.setTab($index + 1)">{{ subs.name }}</a>
                     </li>
                 </ul>
-
-                <!-- here will be content of subsection -->
-
-                <div class="subsections" ng-repeat="sectionContent in section.list track by $index" ng-show="subtab.isSet($index + 1)">
-                    {{ sectionContent }}
-                </div>
-
+                <button class="subsections__add" ng-click="addSubSection(user.email, nowSectionID($index))">+</button>
             </div>
+
+            <!-- here will be content of subsection -->
+
+            <div class="subsections__note" ng-show="subtab.isSet($index + 1)">
+                <textarea placeholder="Мои записи..."></textarea>
+            </div>
+
         </div>
 
     </div>

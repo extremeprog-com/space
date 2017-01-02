@@ -9,6 +9,6 @@ app.controller('TabController', function() {
   };
 
   that.isSet = function(tabNum) {
-    return that.tab === tabNum;
+      return that.tab === tabNum;
   };
 });

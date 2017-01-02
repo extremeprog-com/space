@@ -10,7 +10,7 @@ app.factory('Subsection', function() {
 
     var that = this;
 
-    that.list = [];
+    that.list = {};
 
     that.tempName = "Подраздел " + (that.list.length + 1);
 
@@ -41,6 +41,39 @@ app.factory('Subsection', function() {
 
 
     /**
+     * Get data
+     * @memberOf Subsection
+     * @function
+     * @param {string} email
+     * @param {object} data
+     * @return {promise}
+     */
+    that.getData = function (email, data) {
+      return mongoSitesApi.mgoInterface
+        .find({ "_type": "Subsection", "user": email})
+        .then(function(res) {
+
+          if (res.length) {
+
+            res.forEach(function (item) {
+              console.log(item);
+              // TODO: need to fix rewriting
+              data[item.section].subsection = {};
+              data[item.section].subsection.id = item._id;
+              data[item.section].subsection.name = item.name;
+            });
+
+            return data;
+
+          }
+
+        });
+
+    };
+
+
+
+    /**
      * Create subsection
      * @memberOf Subsection
      * @function
@@ -48,16 +81,21 @@ app.factory('Subsection', function() {
      * @param {string} name
      * @param {function} callback
      */
-    that.create = function (email, name, callback) {
+    that.create = function (email, name, section, callback) {
 
       mongoSitesApi.mgoInterface
-        .insert([{ "_type": "Subsection", "user": email, "name": name, "notes": "[]" }])
+        .insert([{
+          "_type": "Subsection",
+          "user": email,
+          "name": name,
+          "section": section,
+        }])
         .then(function(res) {
           console.log(res);
 
-          that.list.push(name);
+          var subSectionId = res.insertedIds[0];
 
-          if (callback) callback();
+          if (callback) callback(section, subSectionId);
 
         });
     };
@@ -91,6 +129,22 @@ app.factory('Subsection', function() {
 
           if (callback) callback();
 
+        });
+    };
+
+
+    /**
+     * Remove subsection
+     * @memberOf Subsection
+     * @function
+     * @param {string} email
+     * @param {string} id
+     */
+    that.removeById = function (id) {
+      mongoSitesApi.mgoInterface
+        .remove({ "_type": "Subsection", "_id": id})
+        .then(function(res) {
+          console.log(res);
         });
     };
 
