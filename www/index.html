@@ -35,8 +35,8 @@
         <div class="sections">
             <ul class="sections__list js-sections">
                 <li class="sections__add"><span ng-click="addSection(user.email)">Add section</span></li>
-                <li class="sections__item js-li" ng-repeat="(key, value) in data track by $index">
-                    <a href="#" ng-class="{ 'active': tab.isSet($index + 1) }" ng-click="tab.setTab($index + 1)" ng-dblclick="updateSection($event, key, $index)">{{ value.name }}</a>
+                <li class="sections__item js-li" ng-class="{ 'active': tab.isSet($index + 1) }" ng-repeat="(key, value) in data track by $index">
+                    <a href="#" ng-click="tab.setTab($index + 1)" ng-dblclick="updateSection($event, key, $index)">{{ value.name }}</a>
                 </li>
             </ul>
         </div>
@@ -47,8 +47,8 @@
 
             <div class="subsections__wrapper">
                 <ul class="subsections__list js-ul">
-                    <li ng-repeat="subs in value.subsections" class="subsections__item js-li">
-                        <a href="#" ng-class="{ active: subtab.isSet($index + 1) }" ng-click="subtab.setTab($index + 1)" ng-dblclick="updateSubSection($event, subs.id, $index)">{{ subs.name }}</a>
+                    <li ng-repeat="subs in value.subsections" class="subsections__item js-li" ng-class="{ active: subtab.isSet($index + 1) }">
+                        <a href="#" ng-click="subtab.setTab($index + 1)" ng-dblclick="updateSubSection($event, subs.id, $index)">{{ subs.name }}</a>
                     </li>
                 </ul>
                 <button class="subsections__add" ng-click="addSubSection(user.email, key, $index)">+</button>
