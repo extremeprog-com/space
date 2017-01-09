@@ -12,7 +12,7 @@ app.factory('Subsection', function() {
 
     that.list = {};
 
-    that.tempName = "Подраздел " + (that.list.length + 1);
+    that.tempName = "Подраздел ";
 
     /**
      * Get a list of subsection
@@ -55,12 +55,15 @@ app.factory('Subsection', function() {
 
           if (res.length) {
 
-            res.forEach(function (item) {
-              console.log(item);
+
+            res.forEach(function (item, idx) {
+              // console.log(item);
               // TODO: need to fix rewriting
-              data[item.section].subsection = {};
-              data[item.section].subsection.id = item._id;
-              data[item.section].subsection.name = item.name;
+              var obj = {};
+              obj.id = item._id;
+              obj.name = item.name;
+
+              data[item.section].subsections.push(obj);
             });
 
             return data;
@@ -110,13 +113,13 @@ app.factory('Subsection', function() {
      * @param {string} name
      * @param {function} callback
      */
-    that.update = function (id, name, callback) {
+    that.updateName = function (id, name, callback) {
 
+      console.log("Subsection: " + id + " text: " + name);
       mongoSitesApi.mgoInterface
         .update(
-          { "_type": "Subsections",
-            "user": user.email,
-            "id": id
+          {
+            "_id": id
           }, {
             "$set": {
               "name": name
@@ -140,11 +143,13 @@ app.factory('Subsection', function() {
      * @param {string} email
      * @param {string} id
      */
-    that.removeById = function (id) {
-      mongoSitesApi.mgoInterface
+    that.remove = function (id) {
+      return mongoSitesApi.mgoInterface
         .remove({ "_type": "Subsection", "_id": id})
         .then(function(res) {
           console.log(res);
+
+          return res;
         });
     };
 

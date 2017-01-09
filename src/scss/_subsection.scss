@@ -14,13 +14,29 @@
   }
   &__item {
     border-right: 1px solid #c0c0c0;
-    border-bottom: 1px solid #c0c0c0;
-    padding: 0.5em 1em;
     color: #222222;
     cursor: pointer;
+    position: relative;
     & > a {
+      display: block;
+      padding: 0.5em 2em 0.5em 1em;
+      //margin-right: 1em;
       text-decoration: none;
       color: inherit;
+      background: #f2f2f2;
+      &.active {
+        background: #ffffff;
+        border-color: #222222;
+      }
+    }
+    &:after {
+      content: "\00D7";
+      display: block;
+      position: absolute;
+      color: #777777;
+      top: 50%;
+      right: 0.4em;
+      transform: translateY(-45%);
     }
   }
   &__add {
@@ -34,7 +50,9 @@
   &__note {
     & > textarea {
       width: calc(100% - 2.6em);
+      height: calc(100vh - 7.7em);
       border: 0;
+      border-top: 1px solid #c0c0c0;
       padding: 1.3em;
     }
   }

@@ -55,6 +55,7 @@ app.factory('Section', function() {
             res.forEach(function (item) {
               data[item._id] = {};
               data[item._id].name = item.name;
+              data[item._id].subsections = [];
             });
 
             return data;
@@ -123,10 +124,10 @@ app.factory('Section', function() {
      */
     that.updateName = function (id, name, callback) {
 
+      console.log("update");
       mongoSitesApi.mgoInterface
         .update(
-          { "_type": "Sections",
-            "user": user.email,
+          {
             "_id": id
           }, {
             "$set": {

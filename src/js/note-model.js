@@ -27,9 +27,13 @@ app.factory('Note', function() {
 
           if (res.length) {
 
-            res.forEach(function (item) {
-              if( data[item.section].subsection.id == item.subsection) {
-                data[item.section].subsection.note = item.content; }
+            res.forEach(function (item, idx) {
+              data[item.section].subsections.forEach(function (sub, i) {
+
+                if( sub.id == item.subsection) {
+                  data[item.section].subsections[i].note = item.content;
+                }
+              })
             });
 
             return data;
@@ -47,6 +51,8 @@ app.factory('Note', function() {
      * @memberOf Note
      * @function
      * @param {string} email
+     * @param {string} section
+     * @param {string} subsection
      * @param {function} callback
      */
     that.create = function (email, section, subsection, callback) {
@@ -69,15 +75,49 @@ app.factory('Note', function() {
 
 
 
+
+    /**
+     * Update note
+     * @memberOf Note
+     * @function
+     * @param {string} email
+     * @param {string} subsection
+     * @param {string} text
+     * @param {function} callback
+     */
+    that.update = function (subsection, text, callback) {
+
+      console.log("Subsection: " + subsection + " text: " + text);
+      mongoSitesApi.mgoInterface
+        .update(
+          {
+            "_type": "Note",
+            "subsection": subsection
+          }, {
+            "$set": {
+              "content": text
+            }
+          }, {
+            "upsert": true
+          })
+        .then(function(res) {
+          console.log(res);
+
+          if (callback) callback();
+
+        });
+    };
+
+
     /**
      * Remove note
      * @memberOf Note
      * @function
-     * @param {string} id
+     * @param {string} subsection
      */
-    that.removeById = function (id) {
+    that.remove = function (subsection) {
       mongoSitesApi.mgoInterface
-        .remove({ "_type": "Note", "_id": id})
+        .remove({ "_type": "Note", "subsection": subsection })
         .then(function(res) {
           console.log(res);
         });

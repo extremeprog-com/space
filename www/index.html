@@ -36,28 +36,28 @@
             <ul class="sections__list js-sections">
                 <li class="sections__add"><span ng-click="addSection(user.email)">Add section</span></li>
                 <li class="sections__item js-li" ng-repeat="(key, value) in data track by $index">
-                    <a href="#" ng-class="{ 'active': isSet($index + 1) }" ng-click="tab.setTab($index + 1)">{{ value.name }}</a>
+                    <a href="#" ng-class="{ 'active': tab.isSet($index + 1) }" ng-click="tab.setTab($index + 1)" ng-dblclick="updateSection($event, key, $index)">{{ value.name }}</a>
                 </li>
             </ul>
         </div>
 
 
-        <div ng-controller="SubTabController as subtab" class="subsections" ng-repeat="(key, value) in data track by $index" ng-show="tab.isSet($index + 1)">
+        <div ng-controller="SubTabController as subtab" class="subsections js-subsection" ng-repeat="(key, value) in data track by $index" ng-show="tab.isSet($index + 1)">
             <!-- here will be list of subsections' tabs -->
 
             <div class="subsections__wrapper">
-                <ul class="subsections__list js-subsections">
-                    <li ng-repeat="subs in value" class="subsections__item js-li" ng-class="{ active: subtab.isSet($index + 1) }">
-                        <a href="#" ng-click="subtab.setTab($index + 1)">{{ subs.name }}</a>
+                <ul class="subsections__list js-ul">
+                    <li ng-repeat="subs in value.subsections" class="subsections__item js-li">
+                        <a href="#" ng-class="{ active: subtab.isSet($index + 1) }" ng-click="subtab.setTab($index + 1)" ng-dblclick="updateSubSection($event, subs.id, $index)">{{ subs.name }}</a>
                     </li>
                 </ul>
-                <button class="subsections__add" ng-click="addSubSection(user.email, nowSectionID($index))">+</button>
+                <button class="subsections__add" ng-click="addSubSection(user.email, key, $index)">+</button>
             </div>
 
             <!-- here will be content of subsection -->
 
-            <div class="subsections__note" ng-show="subtab.isSet($index + 1)">
-                <textarea placeholder="Мои записи..."></textarea>
+            <div class="subsections__note js-notearea-wrpr" ng-repeat="subt in value.subsections track by $index" ng-show="subtab.isSet($index + 1)">
+                <textarea class="js-notearea" ng-blur="updateNote($event, subt.id)" placeholder="Мои записи...">{{ subt.note }}</textarea>
             </div>
 
         </div>

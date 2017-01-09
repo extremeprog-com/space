@@ -14,9 +14,9 @@ app.factory('User', function() {
 
     var that = this;
 
-    if (window.localStorage.gitGymUser) {
-      that.email = angular.fromJson(window.localStorage.gitGymUser).email;
-      that.hash = angular.fromJson(window.localStorage.gitGymUser).hash;
+    if (window.localStorage.spaceUser) {
+      that.email = angular.fromJson(window.localStorage.spaceUser).email;
+      that.hash = angular.fromJson(window.localStorage.spaceUser).hash;
       apply();
     }
 

@@ -81,10 +81,11 @@ app.controller("MainCtrl", ["$scope", "User", "Section", "Subsection", "Note", f
    * @param {string} name
    * @param {string} onBind - function which will execute on bind
    */
-  $scope.addSubSection = function (email, section) {
+  $scope.addSubSection = function (email, section, idx) {
     console.log("add subsection");
 
-    var parent = document.querySelector(".js-subsections");
+    // var parent = document.querySelector(".js-subsections");
+    var parent = document.querySelectorAll(".js-subsection")[idx].querySelector(".js-ul");
 
     var newLi = document.createElement('li');
 
@@ -110,6 +111,90 @@ app.controller("MainCtrl", ["$scope", "User", "Section", "Subsection", "Note", f
     });
 
   };
+
+
+
+
+  /**
+   * @function
+   * @param {string} email
+   * @param {string} name
+   * @param {string} onBind - function which will execute on bind
+   */
+  $scope.updateNote = function (event, subsection) {
+    var noteArea = event.srcElement;// document.querySelectorAll(".js-notearea-wrpr")[idx].querySelector(".js-notearea");
+    // console.log(noteArea.value);
+    // console.log(idx);
+    // console.log(subsection);
+
+    if (noteArea.value === "" && noteArea.value === " ") {
+      console.log("nothing to write");
+      return;
+    } else {
+      var text = noteArea.value;
+      console.log(text);
+      $scope.note.update(subsection, text, apply);
+    }
+  };
+
+
+
+
+  $scope.updateSection = function (event, section, idx) {
+    var li = event.srcElement;
+    li.setAttribute("contenteditable", "true");
+    li.focus();
+
+
+    li.addEventListener("blur", function () {
+      if (li.innerText === "" && li.innerText === " ") {
+        li.removeAttribute("contenteditable");
+        apply();
+        return;
+      } else {
+        li.removeAttribute("contenteditable");
+        var name = li.innerText;
+        console.log(name);
+        $scope.section.updateName(section, name, apply);
+      }
+
+    });
+  };
+
+
+
+
+  $scope.updateSubSection = function (event, subsection, idx) {
+    console.log(event.srcElement);
+    var li = event.srcElement;
+
+
+    li.setAttribute("contenteditable", "true");
+    li.focus();
+
+
+    li.addEventListener("blur", function () {
+      if (li.innerText === "" && li.innerText === " ") {
+        li.removeAttribute("contenteditable");
+        apply();
+        return;
+      } else {
+        li.removeAttribute("contenteditable");
+        var name = li.innerText;
+        console.log(name);
+        $scope.subSection.updateName(subsection, name, apply);
+      }
+
+    });
+  };
+
+
+
+
+  $scope.removeSubSection = function () {
+
+  }
+
 
 
 
