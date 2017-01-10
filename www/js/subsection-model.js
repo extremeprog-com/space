@@ -145,7 +145,7 @@ app.factory('Subsection', function() {
      */
     that.remove = function (id) {
       return mongoSitesApi.mgoInterface
-        .remove({ "_type": "Subsection", "_id": id})
+        .remove({ "_id": id})
         .then(function(res) {
           console.log(res);
 

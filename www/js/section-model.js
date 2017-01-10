@@ -155,28 +155,28 @@ app.factory('Section', function() {
      * @param {array} subsections
      * @param {function} callback
      */
-    that.updateSubsections = function (id, subsections, callback) {
-      var subsections = angular.toJson(subsections);
-
-      mongoSitesApi.mgoInterface
-        .update(
-          { "_type": "Sections",
-            "user": user.email,
-            "_id": id
-          }, {
-            "$set": {
-              "subsections": subsections
-            }
-          }, {
-            "upsert": true
-          })
-        .then(function(res) {
-          console.log(res);
-
-          if (callback) callback();
-
-        });
-    };
+    // that.updateSubsections = function (id, subsections, callback) {
+    //   var subsections = angular.toJson(subsections);
+    //
+    //   mongoSitesApi.mgoInterface
+    //     .update(
+    //       { "_type": "Sections",
+    //         "user": user.email,
+    //         "_id": id
+    //       }, {
+    //         "$set": {
+    //           "subsections": subsections
+    //         }
+    //       }, {
+    //         "upsert": true
+    //       })
+    //     .then(function(res) {
+    //       console.log(res);
+    //
+    //       if (callback) callback();
+    //
+    //     });
+    // };
 
 
 
@@ -186,11 +186,12 @@ app.factory('Section', function() {
      * @function
      * @param {string} id
      */
-    that.removeById = function (id) {
-      mongoSitesApi.mgoInterface
+    that.remove = function (id) {
+      return mongoSitesApi.mgoInterface
         .remove({ "_type": "Section", "_id": id})
         .then(function(res) {
           console.log(res);
+          return res;
         });
     };
 

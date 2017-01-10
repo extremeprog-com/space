@@ -1,9 +1,12 @@
 "use strict";
 
-app.controller('AuthCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('AuthCtrl', ['$scope', 'Section', 'Subsection', 'Note', function ($scope, Section, Subsection, Note) {
 
   // register new user
   $scope.user = {};
+  $scope.section = new Section();
+  $scope.subSection = new Subsection();
+  $scope.note = new Note();
 
   $scope.register = function (email, passwd) {
     event.preventDefault();
@@ -59,13 +62,17 @@ app.controller('AuthCtrl', ['$scope', '$http', function ($scope, $http) {
                 .auth_update({_id: email, hash: $scope.user.hash})
                 .then(function (res) {
                   console.log($scope.user);
-                  window.localStorage.gitGimUser = angular.toJson($scope.user);
 
-                  $http({
-                    url: '/new-user',
-                    method: 'GET',
-                    params: {id: $scope.user.hash}
+
+                  return $scope.section.create(email, "Раздел", function (sectionId) {
+                    $scope.subSection.create(email, $scope.subSection.tempName, sectionId, function (sectionId, subSectionId) {
+                      $scope.note.create(email, sectionId, subSectionId);
+                    });
                   });
+                })
+                .then(function () {
+
+                  window.localStorage.spaceUser = angular.toJson($scope.user);
 
                   window.location.pathname = '/';
                 });

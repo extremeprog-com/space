@@ -10,6 +10,11 @@
     <script src="http://msa.trean.extremeprog.com/mongoSitesApi.angular.js?site=space"></script>
 
     <script src="/js/app.js" language="javascript" type="text/javascript"></script>
+
+    <script src="/js/section-model.js" language="javascript" type="text/javascript"></script>
+    <script src="/js/subsection-model.js" language="javascript" type="text/javascript"></script>
+    <script src="/js/note-model.js" language="javascript" type="text/javascript"></script>
+
     <script src="/js/auth-controller.js"></script>
 </head>
 <body ng-app="space">
@@ -19,7 +24,7 @@
         <form class="login__form" action="">
             <div class="login__description">
                 <p>[GitGym Login]</p>
-                <a href="/register">Not registered yet?</a>
+                <a href="/register.html">Not registered yet?</a>
             </div>
             <input id="email" type="text" ng-model="user.email" placeholder="Login">
             <input id="passwd" type="password" ng-model="user.passwd" placeholder="Password">

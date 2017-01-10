@@ -12,12 +12,18 @@
     padding: 0;
     list-style: none;
   }
+  &__delete {
+    display: none;
+  }
   &__item {
     border-right: 1px solid #c0c0c0;
     color: #222222;
     background: #f2f2f2;
     cursor: pointer;
     position: relative;
+    &_add {
+      padding: 0.5em 2em 0.5em 1em;
+    }
     & > a {
       display: block;
       padding: 0.5em 2em 0.5em 1em;
@@ -25,18 +31,19 @@
       color: inherit;
       outline: none;
     }
+
     &.active {
       font-weight: 600;
       color: #931621;
       background: #ffffff;
-      &:after {
-        content: "\00D7";
+      & .subsections__delete {
         display: block;
         position: absolute;
         color: #777777;
         top: 50%;
         right: 0.4em;
         transform: translateY(-45%);
+        cursor: pointer;
       }
     }
   }

@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-CONTAINER=point
+CONTAINER=space
 
-docker build -t friend/$CONTAINER point/ && (
+docker build -t friend/$CONTAINER space/ && (
     docker rm -f $CONTAINER
     docker run -itd --name $CONTAINER \
         $ADDITIONAL_DOCKER_ARGS \
         --restart=always \
-        -p 8087:80 \
+        -p 8089:80 \
         -v /opt/containers:/opt/containers:ro \
         -v /opt/containers/$CONTAINER:/opt/containers/$CONTAINER \
         -v /var/log/containers/$CONTAINER:/var/log \

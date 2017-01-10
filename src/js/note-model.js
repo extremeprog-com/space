@@ -116,10 +116,11 @@ app.factory('Note', function() {
      * @param {string} subsection
      */
     that.remove = function (subsection) {
-      mongoSitesApi.mgoInterface
+      return mongoSitesApi.mgoInterface
         .remove({ "_type": "Note", "subsection": subsection })
         .then(function(res) {
           console.log(res);
+          return res;
         });
     };
   };

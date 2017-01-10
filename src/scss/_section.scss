@@ -16,12 +16,19 @@
       color: darken(#c0c0c0, 40%);
     }
   }
+  &__delete {
+    display: none;
+  }
   &__item {
     display: inline-block;
     width: 100%;
     border-bottom: 1px solid #c0c0c0;
     background: #f2f2f2;
     position: relative;
+    &_add {
+      width: calc(100% - 4em);
+      padding: 1em 3em 1em 1em;
+    }
     & > a {
       display: block;
       padding: 1em 3em 1em 1em;
@@ -37,14 +44,14 @@
       color: #931621;
       background: #ffffff;
       box-shadow: inset 0 0 0 3px #222222;
-      &:after {
-        content: "\00D7";
+      & .sections__delete {
         display: block;
         position: absolute;
         color: #777777;
         top: 50%;
         right: 1em;
         transform: translateY(-45%);
+        cursor: pointer;
       }
     }
   }

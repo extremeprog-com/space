@@ -32,7 +32,7 @@ app.factory('User', function() {
         .auth_check()
         .then(function (res) {
           if (!res) {
-            window.location.pathname = '/login';
+            window.location.pathname = '/login.html';
           } else {
 
             that.email = res._id;
@@ -66,7 +66,7 @@ app.factory('User', function() {
         .then(function (res) {
           console.log(res);
 
-          window.location.pathname = '/login';
+          window.location.pathname = '/login.html';
         });
     };
   };
