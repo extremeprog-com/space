@@ -11,16 +11,20 @@
     <!--<script src="/js/angular-sanitize.min.js"></script>-->
     <script src="http://msa.trean.extremeprog.com/mongoSitesApi.angular.js?site=space"></script>
 
+    <script type="text/javascript" src="/js/spin.min.js"></script>
+    <script type="text/javascript" src="/js/angular-spinner.min.js"></script>
+    <script type="text/javascript" src="/js/angular-loading-spinner.js"></script>
+
     <script src="/js/app.js" language="javascript" type="text/javascript"></script>
 
-    <script src="/js/user-model.js" language="javascript" type="text/javascript"></script>
-    <script src="/js/section-model.js" language="javascript" type="text/javascript"></script>
-    <script src="/js/subsection-model.js" language="javascript" type="text/javascript"></script>
-    <script src="/js/note-model.js" language="javascript" type="text/javascript"></script>
+    <script src="/js/model/user-model.js" language="javascript" type="text/javascript"></script>
+    <script src="/js/model/section-model.js" language="javascript" type="text/javascript"></script>
+    <script src="/js/model/subsection-model.js" language="javascript" type="text/javascript"></script>
+    <script src="/js/model/note-model.js" language="javascript" type="text/javascript"></script>
 
-    <script src="/js/main-controller.js" language="javascript" type="text/javascript"></script>
-    <script src="/js/tab-controller.js" language="javascript" type="text/javascript"></script>
-    <script src="/js/subtab-controller.js" language="javascript" type="text/javascript"></script>
+    <script src="/js/controllers/main-controller.js" language="javascript" type="text/javascript"></script>
+    <script src="/js/controllers/tab-controller.js" language="javascript" type="text/javascript"></script>
+    <script src="/js/controllers/subtab-controller.js" language="javascript" type="text/javascript"></script>
 
 </head>
 <body ng-app="space">
@@ -33,6 +37,7 @@
     <div class="workspace" ng-controller="TabController as tab">
 
         <div class="sections">
+             <span us-spinner="{radius:8, width:1, length: 4}"></span>
             <ul class="sections__list js-sections">
                 <li class="sections__add"><span ng-click="addSection(user.email)">Add section</span></li>
                 <li class="sections__item js-li" ng-class="{ 'active': tab.isSet($index + 1) }" ng-repeat="(key, value) in data track by $index">

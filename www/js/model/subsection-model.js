@@ -24,11 +24,8 @@ app.factory('Subsection', function() {
       mongoSitesApi.mgoInterface
         .find({ "_type": "Subsection", "user": email})
         .then(function(res) {
-          // your code here
-          console.log("getListOfSubsections()", res);
 
           if (res.length) {
-            console.log("res length");
 
             res.forEach(function (item) {
               that.list.push(item.name);
@@ -57,7 +54,6 @@ app.factory('Subsection', function() {
 
 
             res.forEach(function (item, idx) {
-              // console.log(item);
               // TODO: need to fix rewriting
               var obj = {};
               obj.id = item._id;
@@ -96,11 +92,8 @@ app.factory('Subsection', function() {
           "section": section,
         }])
         .then(function(res) {
-          console.log(res);
 
           var subSectionId = res.insertedIds[0];
-
-          // if (callback) callback(section, subSectionId);
 
           return [section, subSectionId];
 
@@ -119,7 +112,6 @@ app.factory('Subsection', function() {
      */
     that.updateName = function (id, name, callback) {
 
-      console.log("Subsection: " + id + " text: " + name);
       mongoSitesApi.mgoInterface
         .update(
           {
@@ -132,7 +124,6 @@ app.factory('Subsection', function() {
             "upsert": true
           })
         .then(function(res) {
-          console.log(res);
 
           if (callback) callback();
 
@@ -151,7 +142,6 @@ app.factory('Subsection', function() {
       return mongoSitesApi.mgoInterface
         .remove({ "_id": id})
         .then(function(res) {
-          console.log(res);
 
           return res;
         });

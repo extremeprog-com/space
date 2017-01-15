@@ -27,7 +27,7 @@ app.factory('Note', function() {
 
           if (res.length) {
 
-            res.forEach(function (item, idx) {
+            res.forEach(function (item) {
               data[item.section].subsections.forEach(function (sub, i) {
 
                 if( sub.id == item.subsection) {
@@ -55,9 +55,9 @@ app.factory('Note', function() {
      * @param {string} subsection
      * @param {function} callback
      */
-    that.create = function (email, section, subsection, callback) {
+    that.create = function (email, section, subsection) {
 
-      mongoSitesApi.mgoInterface
+      return mongoSitesApi.mgoInterface
         .insert([{
           "_type": "Note",
           "user": email,
@@ -65,10 +65,9 @@ app.factory('Note', function() {
           "subsection": subsection,
           "content": "" }])
         .then(function(res) {
-          console.log(res);
 
-          if (callback) callback();
           apply();
+          return res;
 
         });
     };
@@ -85,13 +84,13 @@ app.factory('Note', function() {
      * @param {string} text
      * @param {function} callback
      */
-    that.update = function (subsection, text, callback) {
+    that.update = function (subsection, text, user) {
 
-      console.log("Subsection: " + subsection + " text: " + text);
-      mongoSitesApi.mgoInterface
+      return mongoSitesApi.mgoInterface
         .update(
           {
             "_type": "Note",
+            "user": user,
             "subsection": subsection
           }, {
             "$set": {
@@ -101,10 +100,10 @@ app.factory('Note', function() {
             "upsert": true
           })
         .then(function(res) {
-          console.log(res);
 
-          if (callback) callback();
+          // if (callback) callback();
 
+          return res;
         });
     };
 
@@ -116,10 +115,9 @@ app.factory('Note', function() {
      * @param {string} subsection
      */
     that.remove = function (subsection) {
-      return mongoSitesApi.mgoInterface
+      mongoSitesApi.mgoInterface
         .remove({ "_type": "Note", "subsection": subsection })
         .then(function(res) {
-          console.log(res);
           return res;
         });
     };

@@ -3,4 +3,4 @@
 /**
  * @class angular_module.app
  */
-var app = angular.module("space", ["mongoSitesApi"]);
+var app = angular.module("space", ["mongoSitesApi", "ngLoadingSpinner"]);

@@ -5,9 +5,10 @@
  * @class angular_module.app.MainCtrl
  * @memberof angular_module.app
  */
-app.controller("MainCtrl", ["$scope", "User", "Section", "Subsection", "Note", function ($scope, User, Section, Subsection, Note) {
+app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsection", "Note", function ($scope, $rootScope, User, Section, Subsection, Note) {
 
   window.scope = $scope;
+  window.rootScope = $rootScope;
 
   $scope.user = new User(apply);
   $scope.model = {};
@@ -15,6 +16,16 @@ app.controller("MainCtrl", ["$scope", "User", "Section", "Subsection", "Note", f
   $scope.section = new Section(apply);
   $scope.subSection = new Subsection(apply);
   $scope.note = new Note(apply);
+  $scope.isLoading = false;
+  $scope.spinnerActive = false;
+  $scope.tempId = 0;
+
+  $scope.$watch("isLoading", function (loading) {
+    console.log("loading... " + loading)
+    $rootScope.spinnerActive = loading;
+  });
+
+  $rootScope.spinnerActive = $scope.spinnerActive;
 
 
   var getData = function (user) {
@@ -27,7 +38,6 @@ app.controller("MainCtrl", ["$scope", "User", "Section", "Subsection", "Note", f
         return $scope.note.getData(user.email, data);
       })
       .then(function (data) {
-        console.log(data);
         apply();
       });
   };
@@ -47,7 +57,6 @@ app.controller("MainCtrl", ["$scope", "User", "Section", "Subsection", "Note", f
    * @param {string} onBind - function which will execute on bind
    */
   $scope.addSection = function (email) {
-    console.log("add section");
 
     var parent = document.querySelector(".js-sections");
     var sibling = document.querySelector(".js-li");
@@ -63,15 +72,26 @@ app.controller("MainCtrl", ["$scope", "User", "Section", "Subsection", "Note", f
     newLi.focus();
 
     function save () {
+      $scope.isLoading = true;
       if (newLi.innerText === "") {
         newLi.remove();
+        $scope.isLoading = false;
       } else {
         newLi.remove();
-        $scope.section.create(email, newLi.innerText, function (sectionId) {
-          $scope.subSection.create(email, $scope.subSection.tempName, sectionId, function (sectionId, subSectionId) {
-            $scope.note.create(email, sectionId, subSectionId, getData($scope.user));
+        $scope.section.create(email, newLi.innerText, $scope.tempId)
+          .then(function (sectionId) {
+            return $scope.subSection.create(email, $scope.subSection.tempName, sectionId);
           })
-        });
+          .then(function (res) {
+            var sectionId = res[0];
+            var subSectionId = res[1];
+            return $scope.note.create(email, sectionId, subSectionId);
+          })
+          .then(function () {
+            $scope.isLoading = false;
+            console.log("wait...");
+            getData($scope.user);
+          });
       }
     };
 
@@ -84,7 +104,7 @@ app.controller("MainCtrl", ["$scope", "User", "Section", "Subsection", "Note", f
       var keyCode = e.keyCode || e.which;
 
       if (keyCode == '13'){
-        save();
+        newLi.blur();
       }
     });
 
@@ -100,7 +120,6 @@ app.controller("MainCtrl", ["$scope", "User", "Section", "Subsection", "Note", f
    * @param {string} onBind - function which will execute on bind
    */
   $scope.addSubSection = function (email, section, idx) {
-    console.log("add subsection");
 
     var parent = document.querySelectorAll(".js-subsection")[idx].querySelector(".js-ul");
 
@@ -114,19 +133,41 @@ app.controller("MainCtrl", ["$scope", "User", "Section", "Subsection", "Note", f
 
     newLi.focus();
 
-    console.log("section", section);
-    newLi.addEventListener("blur", function () {
+
+    function save () {
+      $scope.isLoading = true;
+
       if (newLi.innerText === "") {
         newLi.remove();
+        $scope.isLoading = false;
       } else {
         newLi.remove();
-          $scope.subSection.create(email, newLi.innerText, section, function (sectionId, subSectionId) {
-            $scope.note.create(email, sectionId, subSectionId, getData($scope.user));
+        $scope.subSection.create(email, newLi.innerText, section)
+          .then(function (res) {
+            var sectionId = res[0];
+            var subSectionId = res[1];
+            return $scope.note.create(email, sectionId, subSectionId);
+          })
+          .then(function () {
+            $scope.isLoading = false;
+            getData($scope.user);
           });
       }
+    };
 
+    newLi.addEventListener("blur", function () {
+      save();
     });
 
+
+    newLi.addEventListener("keypress", function (e) {
+      if (!e) e = window.event;
+      var keyCode = e.keyCode || e.which;
+
+      if (keyCode == '13'){
+        newLi.blur();
+      }
+    });
   };
 
 
@@ -145,9 +186,13 @@ app.controller("MainCtrl", ["$scope", "User", "Section", "Subsection", "Note", f
       console.log("nothing to write");
       return;
     } else {
+      $scope.isLoading = true;
       var text = noteArea.value;
-      console.log(text);
-      $scope.note.update(subsection, text, getData($scope.user));
+      $scope.note.update(subsection, text, $scope.user.email)
+        .then(function () {
+          $scope.isLoading = false;
+          getData($scope.user);
+        });
     }
   };
 
@@ -168,7 +213,6 @@ app.controller("MainCtrl", ["$scope", "User", "Section", "Subsection", "Note", f
       } else {
         li.removeAttribute("contenteditable");
         var name = li.innerText;
-        console.log(name);
         $scope.section.updateName(section, name, getData($scope.user));
       }
 
@@ -179,7 +223,6 @@ app.controller("MainCtrl", ["$scope", "User", "Section", "Subsection", "Note", f
 
 
   $scope.updateSubSection = function (event, subsection, idx) {
-    console.log(event.srcElement);
     var li = event.srcElement;
 
 
@@ -195,7 +238,6 @@ app.controller("MainCtrl", ["$scope", "User", "Section", "Subsection", "Note", f
       } else {
         li.removeAttribute("contenteditable");
         var name = li.innerText;
-        console.log(name);
         $scope.subSection.updateName(subsection, name, getData($scope.user));
       }
 
@@ -208,7 +250,6 @@ app.controller("MainCtrl", ["$scope", "User", "Section", "Subsection", "Note", f
 
   $scope.removeSection = function (section, tab) {
     if (confirm("Are you shure you want to delete the section with sunsections and notes?")) {
-      console.log("Will be delete section: " + section);
       $scope.section.remove(section)
         .then(function (res) {
           if (res.n == 1) {
@@ -216,7 +257,6 @@ app.controller("MainCtrl", ["$scope", "User", "Section", "Subsection", "Note", f
             var allPromises = $scope.data[section].subsections.map(function (subsection) {
               return $scope.subSection.remove(subsection.id)
                 .then(function (res) {
-                  console.log(res);
                   return $scope.note.remove(subsection.id);
                 });
 
@@ -227,7 +267,6 @@ app.controller("MainCtrl", ["$scope", "User", "Section", "Subsection", "Note", f
           }
         })
         .then(function () {
-          console.log("tab")
           return getData($scope.user);
         })
         .then(function() {
@@ -241,11 +280,9 @@ app.controller("MainCtrl", ["$scope", "User", "Section", "Subsection", "Note", f
 
   $scope.removeSubSection = function (subsection, subtab) {
     if (confirm("Are you shure you want to delete the subsection and notes?")) {
-      console.log("Will be delete subsection: " + subsection);
       $scope.subSection.remove(subsection)
         .then(function (res) {
-          console.log(res);
-          return $scope.note.remove(subsection);
+         return $scope.note.remove(subsection);
         })
         .then(function (res) {
           if (res.n == 1) {

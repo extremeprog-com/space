@@ -50,9 +50,12 @@ app.factory('Section', function() {
      * @param {string} name
      * @param {function} callback
      */
-    that.create = function (email, name, callback) {
+    that.create = function (email, name, tempId) {
 
       // TODO: add new section to data
+
+
+
 
       return mongoSitesApi.mgoInterface
         .insert([{
@@ -61,11 +64,8 @@ app.factory('Section', function() {
           "name": name
         }])
         .then(function(res) {
-          console.log(res.insertedIds[0]);
 
           var sectionId = res.insertedIds[0];
-
-          // if (callback) callback(sectionId);
           apply();
 
           return sectionId;
@@ -84,8 +84,6 @@ app.factory('Section', function() {
       mongoSitesApi.mgoInterface
         .remove({ "_id": _id})
         .then(function(res) {
-          // your code here
-          console.log(res);
 
           if (callback) callback();
 
@@ -104,7 +102,6 @@ app.factory('Section', function() {
      */
     that.updateName = function (id, name, callback) {
 
-      console.log("update");
       mongoSitesApi.mgoInterface
         .update(
           {
@@ -117,7 +114,6 @@ app.factory('Section', function() {
             "upsert": true
           })
         .then(function(res) {
-          console.log(res);
 
           if (callback) callback();
 
@@ -136,7 +132,6 @@ app.factory('Section', function() {
       return mongoSitesApi.mgoInterface
         .remove({ "_type": "Section", "_id": id})
         .then(function(res) {
-          console.log(res);
           return res;
         });
     };

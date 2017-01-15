@@ -64,6 +64,23 @@ mark {
   }
 }
 
+.spinner {
+  top: 3.9em !important;
+  left: 27% !important;
+}
+
+.saved {
+  .spinner {
+    visibility: hidden;
+  }
+  &:after {
+    content: "\2714";
+    font-size: 1.7em;
+    color: darkgreen;
+    position: absolute;
+    left: 26%;
+  }
+}
 
 @mixin button {
   border: 3px solid #222222;

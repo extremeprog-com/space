@@ -13,31 +13,6 @@ app.factory('Section', function() {
     that.data = {};
 
     /**
-     * Get a list of sections
-     * @memberOf Section
-     * @function
-     * @param {string} email
-     */
-    that.getListOfSections = function (email) {
-      mongoSitesApi.mgoInterface
-        .find({ "_type": "Section", "user": email})
-        .then(function(res) {
-          console.log("getListOfSections()", res);
-
-          if (res.length) {
-            console.log("res length");
-
-            res.forEach(function (item) {
-              that.list.push(item.name);
-            });
-
-            apply();
-          }
-        });
-    };
-
-
-    /**
      * Get data
      * @memberOf Section
      * @function
@@ -75,20 +50,25 @@ app.factory('Section', function() {
      * @param {string} name
      * @param {function} callback
      */
-    that.create = function (email, name, callback) {
+    that.create = function (email, name, tempId) {
 
-      mongoSitesApi.mgoInterface
+      // TODO: add new section to data
+
+
+
+
+      return mongoSitesApi.mgoInterface
         .insert([{
           "_type": "Section",
           "user": email,
           "name": name
         }])
         .then(function(res) {
-          console.log(res.insertedIds[0]);
-          var sectionId = res.insertedIds[0];
 
-          if (callback) callback(sectionId);
+          var sectionId = res.insertedIds[0];
           apply();
+
+          return sectionId;
 
         });
     };
@@ -104,8 +84,6 @@ app.factory('Section', function() {
       mongoSitesApi.mgoInterface
         .remove({ "_id": _id})
         .then(function(res) {
-          // your code here
-          console.log(res);
 
           if (callback) callback();
 
@@ -124,7 +102,6 @@ app.factory('Section', function() {
      */
     that.updateName = function (id, name, callback) {
 
-      console.log("update");
       mongoSitesApi.mgoInterface
         .update(
           {
@@ -137,46 +114,11 @@ app.factory('Section', function() {
             "upsert": true
           })
         .then(function(res) {
-          console.log(res);
 
           if (callback) callback();
 
         });
     };
-
-
-
-    /**
-     * Update subsections list
-     * @memberOf Section
-     * @function
-     * @param {string} id
-     * @param {string} name
-     * @param {array} subsections
-     * @param {function} callback
-     */
-    // that.updateSubsections = function (id, subsections, callback) {
-    //   var subsections = angular.toJson(subsections);
-    //
-    //   mongoSitesApi.mgoInterface
-    //     .update(
-    //       { "_type": "Sections",
-    //         "user": user.email,
-    //         "_id": id
-    //       }, {
-    //         "$set": {
-    //           "subsections": subsections
-    //         }
-    //       }, {
-    //         "upsert": true
-    //       })
-    //     .then(function(res) {
-    //       console.log(res);
-    //
-    //       if (callback) callback();
-    //
-    //     });
-    // };
 
 
 
@@ -190,7 +132,6 @@ app.factory('Section', function() {
       return mongoSitesApi.mgoInterface
         .remove({ "_type": "Section", "_id": id})
         .then(function(res) {
-          console.log(res);
           return res;
         });
     };
