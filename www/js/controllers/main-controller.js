@@ -16,12 +16,13 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
   $scope.section = new Section(apply);
   $scope.subSection = new Subsection(apply);
   $scope.note = new Note(apply);
+
+  var tempValue = null;
   $scope.isLoading = false;
   $scope.spinnerActive = false;
-  $scope.tempId = 0;
 
   $scope.$watch("isLoading", function (loading) {
-    console.log("loading... " + loading)
+    console.log("loading... " + loading);
     $rootScope.spinnerActive = loading;
   });
 
@@ -38,16 +39,41 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
         return $scope.note.getData(user.email, data);
       })
       .then(function (data) {
+        $scope.isLoading = false;
         apply();
       });
   };
 
 
   $scope.initApp = function () {
+    $scope.isLoading = true;
     $scope.user.getUser(function (user) {
       getData(user);
     });
   };
+
+
+
+
+  function sectionDataUpdate (id, elem) {
+    $scope.data[id] = {};
+    $scope.data[id].name = elem.innerText;
+    $scope.data[id].subsections = [];
+  };
+
+
+
+  function subSectionDataUpdate(id, sectionId, sectionInData) {
+    var idx = $scope.data[sectionId].subsections + 1;
+    sectionInData.subsections[idx] = {};
+    sectionInData.subsections[idx].id = id;
+    sectionInData.subsections[idx].name = $scope.subSection.tempName;
+    sectionInData.subsections[idx].note = "";
+    sectionInData.subsections[idx].create_at = Date.now();
+  };
+
+
+
 
 
   /**
@@ -78,14 +104,26 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
         $scope.isLoading = false;
       } else {
         newLi.remove();
-        $scope.section.create(email, newLi.innerText, $scope.tempId)
+
+        var id0 = Math.random().toString(36).substr(2);
+        var id1 = Math.random().toString(36).substr(2);
+        var id2 = Math.random().toString(36).substr(2);
+
+        $scope.section.create(email, id0, newLi.innerText)
           .then(function (sectionId) {
-            return $scope.subSection.create(email, $scope.subSection.tempName, sectionId);
+
+            sectionDataUpdate(id0, newLi);
+            subSectionDataUpdate(id1, id0, $scope.data[id0]);
+
+            apply();
+
+            return $scope.subSection.create(email, id1, $scope.subSection.tempName, sectionId);
           })
           .then(function (res) {
             var sectionId = res[0];
             var subSectionId = res[1];
-            return $scope.note.create(email, sectionId, subSectionId);
+
+            return $scope.note.create(email, id2, sectionId, subSectionId);
           })
           .then(function () {
             $scope.isLoading = false;
@@ -119,9 +157,9 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
    * @param {string} name
    * @param {string} onBind - function which will execute on bind
    */
-  $scope.addSubSection = function (email, section, idx) {
+  $scope.addSubSection = function (email, section, subtab, arrLength) {
 
-    var parent = document.querySelectorAll(".js-subsection")[idx].querySelector(".js-ul");
+    var parent = document.querySelectorAll(".js-subsection")[0].querySelector(".js-ul");
 
     var newLi = document.createElement('li');
 
@@ -142,15 +180,21 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
         $scope.isLoading = false;
       } else {
         newLi.remove();
-        $scope.subSection.create(email, newLi.innerText, section)
+        var id = Math.random().toString(36).substr(2);
+        $scope.subSection.create(email, id, newLi.innerText, section)
           .then(function (res) {
+            id = Math.random().toString(36).substr(2);
             var sectionId = res[0];
             var subSectionId = res[1];
-            return $scope.note.create(email, sectionId, subSectionId);
+            return $scope.note.create(email, id, sectionId, subSectionId);
           })
           .then(function () {
             $scope.isLoading = false;
             getData($scope.user);
+          })
+          .then(function (res) {
+            var _tab = Math.max(1, arrLength + 1);
+            subtab.setTab(_tab);
           });
       }
     };
@@ -172,6 +216,30 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
 
 
 
+  $scope.setTempValue = function (event) {
+    tempValue = event.srcElement.innerText || event.srcElement.value;
+    console.log(tempValue);
+  };
+
+
+  function updateNote(noteArea, subsection) {
+    if (noteArea.value === "" && noteArea.value === " " || noteArea.value === tempValue) {
+      console.log("nothing to write");
+      return;
+    } else {
+
+      $scope.isLoading = true;
+
+      console.log("isLoding: " + $scope.isLoading);
+      var text = noteArea.value;
+      $scope.note.update(subsection, text, $scope.user.email)
+        .then(function () {
+          $scope.isLoading = false;
+          getData($scope.user);
+        });
+
+    }
+  };
 
   /**
    * @function
@@ -179,23 +247,25 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
    * @param {string} name
    * @param {string} onBind - function which will execute on bind
    */
-  $scope.updateNote = function (event, subsection) {
+  $scope.updateEditableNote = function (event, subsection) {
     var noteArea = event.srcElement;
+    console.log(noteArea.value);
 
-    if (noteArea.value === "" && noteArea.value === " ") {
-      console.log("nothing to write");
-      return;
-    } else {
-      $scope.isLoading = true;
-      var text = noteArea.value;
-      $scope.note.update(subsection, text, $scope.user.email)
-        .then(function () {
-          $scope.isLoading = false;
-          getData($scope.user);
-        });
-    }
+    $scope.noteSaveInterval = setInterval(function () {
+      console.log(noteArea.value);
+      updateNote(noteArea, subsection);
+    }, 10000);
   };
 
+
+
+
+  $scope.clearUpdateNote = function (event, subsection) {
+    var noteArea = event.srcElement;
+    clearInterval($scope.noteSaveInterval);
+
+    updateNote(noteArea, subsection);
+  };
 
 
 
@@ -206,7 +276,7 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
 
 
     li.addEventListener("blur", function () {
-      if (li.innerText === "" && li.innerText === " ") {
+      if (li.innerText === "" && li.innerText === " " || li.innerText === tempValue) {
         li.removeAttribute("contenteditable");
         apply();
         return;
@@ -217,12 +287,21 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
       }
 
     });
+
+    li.addEventListener("keypress", function (e) {
+      if (!e) e = window.event;
+      var keyCode = e.keyCode || e.which;
+
+      if (keyCode == '13'){
+        li.blur();
+      }
+    });
   };
 
 
 
 
-  $scope.updateSubSection = function (event, subsection, idx) {
+  $scope.updateSubSection = function (event, subsection) {
     var li = event.srcElement;
 
 
@@ -231,7 +310,7 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
 
 
     li.addEventListener("blur", function () {
-      if (li.innerText === "" && li.innerText === " ") {
+      if (li.innerText === "" && li.innerText === " " || li.innerText === tempValue) {
         li.removeAttribute("contenteditable");
         apply();
         return;
@@ -241,6 +320,15 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
         $scope.subSection.updateName(subsection, name, getData($scope.user));
       }
 
+    });
+
+    li.addEventListener("keypress", function (e) {
+      if (!e) e = window.event;
+      var keyCode = e.keyCode || e.which;
+
+      if (keyCode == '13'){
+        li.blur();
+      }
     });
   };
 
@@ -285,6 +373,7 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
          return $scope.note.remove(subsection);
         })
         .then(function (res) {
+          console.log(res);
           if (res.n == 1) {
             getData($scope.user);
           }

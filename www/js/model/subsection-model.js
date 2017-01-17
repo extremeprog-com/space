@@ -54,10 +54,10 @@ app.factory('Subsection', function() {
 
 
             res.forEach(function (item, idx) {
-              // TODO: need to fix rewriting
               var obj = {};
               obj.id = item._id;
               obj.name = item.name;
+              obj.create_at = item.create_at;
 
               data[item.section].subsections.push(obj);
             });
@@ -80,16 +80,16 @@ app.factory('Subsection', function() {
      * @param {string} name
      * @param {function} callback
      */
-    that.create = function (email, name, section, callback) {
-
-      // TODO: add new subsection to data
+    that.create = function (email, id, name, section) {
 
       return mongoSitesApi.mgoInterface
         .insert([{
+          "_id": id,
           "_type": "Subsection",
           "user": email,
           "name": name,
           "section": section,
+          "create_at": Date.now()
         }])
         .then(function(res) {
 

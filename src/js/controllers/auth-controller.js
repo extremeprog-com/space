@@ -4,9 +4,13 @@ app.controller('AuthCtrl', ['$scope', 'Section', 'Subsection', 'Note', function 
 
   // register new user
   $scope.user = {};
-  $scope.section = new Section();
-  $scope.subSection = new Subsection();
-  $scope.note = new Note();
+  $scope.section = new Section(apply);
+  $scope.subSection = new Subsection(apply);
+  $scope.note = new Note(apply);
+
+  function apply () {
+    $scope.$$phase || $scope.$apply();
+  }
 
   $scope.register = function (email, passwd) {
     event.preventDefault();
@@ -64,11 +68,24 @@ app.controller('AuthCtrl', ['$scope', 'Section', 'Subsection', 'Note', function 
                   console.log($scope.user);
 
 
-                  return $scope.section.create(email, "Раздел", function (sectionId) {
-                    $scope.subSection.create(email, $scope.subSection.tempName, sectionId, function (sectionId, subSectionId) {
-                      $scope.note.create(email, sectionId, subSectionId);
+                  var newSectionName = "Раздел";
+                  var newSubsectionName = "Подраздел";
+
+                  var id0 = Math.random().toString(36).substr(2);
+                  var id1 = Math.random().toString(36).substr(2);
+                  var id2 = Math.random().toString(36).substr(2);
+
+                  return $scope.section.create(email, id0, newSectionName)
+                    .then(function (sectionId) {
+                      return $scope.subSection.create(email, id1, newSubsectionName, sectionId);
+                    })
+                    .then(function (res) {
+                      var sectionId = res[0];
+                      var subSectionId = res[1];
+
+                      return $scope.note.create(email, id2, sectionId, subSectionId);
                     });
-                  });
+
                 })
                 .then(function () {
 

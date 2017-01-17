@@ -50,15 +50,11 @@ app.factory('Section', function() {
      * @param {string} name
      * @param {function} callback
      */
-    that.create = function (email, name, tempId) {
-
-      // TODO: add new section to data
-
-
-
+    that.create = function (email, id, name, tempId) {
 
       return mongoSitesApi.mgoInterface
         .insert([{
+          "_id": id,
           "_type": "Section",
           "user": email,
           "name": name

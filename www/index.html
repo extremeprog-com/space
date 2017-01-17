@@ -41,7 +41,7 @@
             <ul class="sections__list js-sections">
                 <li class="sections__add"><span ng-click="addSection(user.email)">Add section</span></li>
                 <li class="sections__item js-li" ng-class="{ 'active': tab.isSet($index + 1) }" ng-repeat="(key, value) in data track by $index">
-                    <a href="#" ng-click="tab.setTab($index + 1)" ng-dblclick="updateSection($event, key, $index)">{{ value.name }}</a>
+                    <a href="#" ng-click="tab.setTab($index + 1)" ng-dblclick="updateSection($event, key, $index)" ng-focus="setTempValue($event)">{{ value.name }}</a>
                     <div class="sections__delete js-delete" ng-click="removeSection(key, tab)">&#215;</div>
                 </li>
             </ul>
@@ -53,18 +53,18 @@
 
             <div class="subsections__wrapper">
                 <ul class="subsections__list js-ul">
-                    <li ng-repeat="subs in value.subsections" class="subsections__item js-li" ng-class="{ active: subtab.isSet($index + 1) }">
-                        <a href="#" ng-click="subtab.setTab($index + 1)" ng-dblclick="updateSubSection($event, subs.id, $index)">{{ subs.name }}</a>
+                    <li ng-repeat="subs in  (items = (value.subsections | orderBy: 'create_at' ))" class="subsections__item js-li" ng-class="{ active: subtab.isSet($index + 1) }">
+                        <a href="#" ng-click="subtab.setTab($index + 1)" ng-dblclick="updateSubSection($event, subs.id, $index)" ng-focus="setTempValue($event)">{{ subs.name }}</a>
                         <div class="subsections__delete js-delete" ng-click="removeSubSection(subs.id, subtab)">&#215;</div>
                     </li>
                 </ul>
-                <button class="subsections__add" ng-click="addSubSection(user.email, key, $index)">+</button>
+                <button class="subsections__add" ng-click="addSubSection(user.email, key, subtab, value.subsections.length)">+</button>
             </div>
 
             <!-- here will be content of subsection -->
 
             <div class="subsections__note js-notearea-wrpr" ng-repeat="subt in value.subsections track by $index" ng-show="subtab.isSet($index + 1)">
-                <textarea class="js-notearea" ng-blur="updateNote($event, subt.id)" placeholder="Мои записи...">{{ subt.note }}</textarea>
+                <textarea class="js-notearea" ng-blur="clearUpdateNote($event, subt.id)" placeholder="Мои записи..." ng-focus="setTempValue($event); updateEditableNote($event, subt.id)">{{ subt.note }}</textarea>
             </div>
 
         </div>
