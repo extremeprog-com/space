@@ -414,7 +414,7 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
     if (confirm("Are you shure you want to delete the subsection and notes?")) {
       $scope.subSection.remove(subsection)
         .then(function (res) {
-         return $scope.note.remove(subsection);
+          return $scope.note.remove(subsection);
         })
         .then(function (res) {
           console.log(res);

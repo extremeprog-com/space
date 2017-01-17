@@ -51,52 +51,52 @@ app.controller('AuthCtrl', ['$scope', 'Section', 'Subsection', 'Note', function 
       return;
     }
 
-      mongoSitesApi
-        .auth_register({_id: email, password: passwd})
-        .then(function (res) {
+    mongoSitesApi
+      .auth_register({_id: email, password: passwd})
+      .then(function (res) {
 
-          mongoSitesApi
-            .auth(email, passwd)
-            .then(function (res) {
+        mongoSitesApi
+          .auth(email, passwd)
+          .then(function (res) {
 
-              $scope.user.hash = Math.random().toString(36).substr(2);
+            $scope.user.hash = Math.random().toString(36).substr(2);
 
-              // add hash
-              mongoSitesApi
-                .auth_update({_id: email, hash: $scope.user.hash})
-                .then(function (res) {
-                  console.log($scope.user);
+            // add hash
+            mongoSitesApi
+              .auth_update({_id: email, hash: $scope.user.hash})
+              .then(function (res) {
+                console.log($scope.user);
 
 
-                  var newSectionName = "Раздел";
-                  var newSubsectionName = "Подраздел";
+                var newSectionName = "Раздел";
+                var newSubsectionName = "Подраздел";
 
-                  var id0 = Math.random().toString(36).substr(2);
-                  var id1 = Math.random().toString(36).substr(2);
-                  var id2 = Math.random().toString(36).substr(2);
+                var id0 = Math.random().toString(36).substr(2);
+                var id1 = Math.random().toString(36).substr(2);
+                var id2 = Math.random().toString(36).substr(2);
 
-                  return $scope.section.create(email, id0, newSectionName)
-                    .then(function (sectionId) {
-                      return $scope.subSection.create(email, id1, newSubsectionName, sectionId);
-                    })
-                    .then(function (res) {
-                      var sectionId = res[0];
-                      var subSectionId = res[1];
+                return $scope.section.create(email, id0, newSectionName)
+                  .then(function (sectionId) {
+                    return $scope.subSection.create(email, id1, newSubsectionName, sectionId);
+                  })
+                  .then(function (res) {
+                    var sectionId = res[0];
+                    var subSectionId = res[1];
 
-                      return $scope.note.create(email, id2, sectionId, subSectionId);
-                    });
+                    return $scope.note.create(email, id2, sectionId, subSectionId);
+                  });
 
-                })
-                .then(function () {
+              })
+              .then(function () {
 
-                  window.localStorage.spaceUser = angular.toJson($scope.user);
+                window.localStorage.spaceUser = angular.toJson($scope.user);
 
-                  window.location.pathname = '/';
-                });
+                window.location.pathname = '/';
+              });
 
-            });
-        });
-    };
+          });
+      });
+  };
 
   // auth user
   $scope.login = function (email, passwd) {
