@@ -157,9 +157,9 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
    * @param {string} name
    * @param {string} onBind - function which will execute on bind
    */
-  $scope.addSubSection = function (email, section, subtab, arrLength) {
+  $scope.addSubSection = function (email, section, subtab, idx, arrLength) {
 
-    var parent = document.querySelectorAll(".js-subsection")[0].querySelector(".js-ul");
+    var parent = document.querySelectorAll(".js-subsection")[idx].querySelector(".js-ul");
 
     var newLi = document.createElement('li');
 

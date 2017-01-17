@@ -53,12 +53,12 @@
 
             <div class="subsections__wrapper">
                 <ul class="subsections__list js-ul">
-                    <li ng-repeat="subs in  (items = (value.subsections | orderBy: 'create_at' ))" class="subsections__item js-li" ng-class="{ active: subtab.isSet($index + 1) }">
+                    <li ng-repeat="subs in (items = (value.subsections | orderBy: 'create_at' ))" class="subsections__item js-li" ng-class="{ active: subtab.isSet($index + 1) }">
                         <a href="#" ng-click="subtab.setTab($index + 1)" ng-dblclick="updateSubSection($event, subs.id, $index)" ng-focus="setTempValue($event)">{{ subs.name }}</a>
                         <div class="subsections__delete js-delete" ng-click="removeSubSection(subs.id, subtab)">&#215;</div>
                     </li>
                 </ul>
-                <button class="subsections__add" ng-click="addSubSection(user.email, key, subtab, value.subsections.length)">+</button>
+                <button class="subsections__add" ng-click="addSubSection(user.email, key, subtab, $index, value.subsections.length)">+</button>
             </div>
 
             <!-- here will be content of subsection -->
