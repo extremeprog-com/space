@@ -3,12 +3,12 @@
 /**
  * Main controller
  * @class angular_module.app.MainCtrl
- * @memberof angular_module.app
+ * @memberOf angular_module.app
  */
 app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsection", "Note", function ($scope, $rootScope, User, Section, Subsection, Note) {
 
-  window.scope = $scope;
-  window.rootScope = $rootScope;
+  // window.scope = $scope;
+  // window.rootScope = $rootScope;
 
   $scope.user = new User(apply);
   $scope.model = {};
@@ -29,6 +29,10 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
   $rootScope.spinnerActive = $scope.spinnerActive;
 
 
+  /**
+   * @function
+   * @param {object} user
+   */
   var getData = function (user) {
     $scope.data = {};
     $scope.section.getData(user.email, $scope.data)
@@ -45,6 +49,10 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
   };
 
 
+  /**
+   * @function
+   * @memberOf angular_module.app.MainCtrl
+   */
   $scope.initApp = function () {
     $scope.isLoading = true;
     $scope.user.getUser(function (user) {
@@ -53,8 +61,11 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
   };
 
 
-
-
+  /**
+   * @function
+   * @param {string} id
+   * @param {object} elem
+   */
   function sectionDataUpdate (id, elem) {
     $scope.data[id] = {};
     $scope.data[id].name = elem.innerText;
@@ -62,7 +73,12 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
   };
 
 
-
+  /**
+   * @function
+   * @param {string} id
+   * @param {string} sectionId
+   * @param {object} sectionInData
+   */
   function subSectionDataUpdate(id, sectionId, sectionInData) {
     var idx = $scope.data[sectionId].subsections + 1;
     sectionInData.subsections[idx] = {};
@@ -73,14 +89,10 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
   };
 
 
-
-
-
   /**
+   * @memberOf angular_module.app.MainCtrl
    * @function
    * @param {string} email
-   * @param {string} name
-   * @param {string} onBind - function which will execute on bind
    */
   $scope.addSection = function (email) {
 
@@ -149,13 +161,14 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
   };
 
 
-
-
   /**
+   * @memberOf angular_module.app.MainCtrl
    * @function
    * @param {string} email
-   * @param {string} name
-   * @param {string} onBind - function which will execute on bind
+   * @param {string} section
+   * @param {object} subtab - subsections' tab controller
+   * @param {number} idx
+   * @param {number} arrLength - length of subsections' array
    */
   $scope.addSubSection = function (email, section, subtab, idx, arrLength) {
 
@@ -170,7 +183,6 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
     parent.appendChild(newLi);
 
     newLi.focus();
-
 
     function save () {
       $scope.isLoading = true;
@@ -215,13 +227,22 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
   };
 
 
-
+  /**
+   * @memberOf angular_module.app.MainCtrl
+   * @function
+   * @param event
+   */
   $scope.setTempValue = function (event) {
     tempValue = event.srcElement.innerText || event.srcElement.value;
-    console.log(tempValue);
   };
 
 
+  /**
+   * Update a note with new value
+   * @function
+   * @param {object} noteArea - note's textarea
+   * @param {string} subsection - subsections ID
+   */
   function updateNote(noteArea, subsection) {
     if (noteArea.value === "" && noteArea.value === " " || noteArea.value === tempValue) {
       console.log("nothing to write");
@@ -241,11 +262,13 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
     }
   };
 
+
   /**
+   * Intermediate note update
+   * @memberOf angular_module.app.MainCtrl
    * @function
-   * @param {string} email
-   * @param {string} name
-   * @param {string} onBind - function which will execute on bind
+   * @param {object} event
+   * @param {string} subsection - subsection ID
    */
   $scope.updateEditableNote = function (event, subsection) {
     var noteArea = event.srcElement;
@@ -258,8 +281,13 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
   };
 
 
-
-
+  /**
+   * Update note's value and clear interval
+   * @memberOf angular_module.app.MainCtrl
+   * @function
+   * @param {object} event
+   * @param {string} subsection - subsection ID
+   */
   $scope.clearUpdateNote = function (event, subsection) {
     var noteArea = event.srcElement;
     clearInterval($scope.noteSaveInterval);
@@ -268,12 +296,16 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
   };
 
 
-
+  /**
+   * @memberOf angular_module.app.MainCtrl
+   * @function
+   * @param {object} event
+   * @param {string} section - section ID
+   */
   $scope.updateSection = function (event, section) {
     var li = event.srcElement;
     li.setAttribute("contenteditable", "true");
     li.focus();
-
 
     li.addEventListener("blur", function () {
       if (li.innerText === "" && li.innerText === " " || li.innerText === tempValue) {
@@ -299,15 +331,17 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
   };
 
 
-
-
+  /**
+   * @memberOf angular_module.app.MainCtrl
+   * @function
+   * @param {object} event
+   * @param {string} subsection - subsection ID
+   */
   $scope.updateSubSection = function (event, subsection) {
     var li = event.srcElement;
 
-
     li.setAttribute("contenteditable", "true");
     li.focus();
-
 
     li.addEventListener("blur", function () {
       if (li.innerText === "" && li.innerText === " " || li.innerText === tempValue) {
@@ -333,9 +367,13 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
   };
 
 
-
-
-
+  /**
+   * Remove a section, it's subsections and notes
+   * @memberOf angular_module.app.MainCtrl
+   * @function
+   * @param {string} section - section ID
+   * @param {object} tab - sections' tab controller
+   */
   $scope.removeSection = function (section, tab) {
     if (confirm("Are you shure you want to delete the section with sunsections and notes?")) {
       $scope.section.remove(section)
@@ -365,7 +403,13 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
   };
 
 
-
+  /**
+   * Remove a subsection and it's notes
+   * @memberOf angular_module.app.MainCtrl
+   * @function
+   * @param {string} subsection - subsection ID
+   * @param {object} subtab - subsection's tabs controller
+   */
   $scope.removeSubSection = function (subsection, subtab) {
     if (confirm("Are you shure you want to delete the subsection and notes?")) {
       $scope.subSection.remove(subsection)
@@ -385,14 +429,9 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
     }
   };
 
-
-
-
-  $scope.nowSectionID = function (idx) {
-   return Object.keys($scope.data)[idx];
-  };
-
-
+  /**
+   * @function
+   */
   function apply () {
     $scope.$$phase || $scope.$apply();
   };
