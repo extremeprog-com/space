@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Space notes for our deep minds' thoughts.</title>
+    <link rel="stylesheet" href="css/style.min.css">
+
+    <script src="http://msa.trean.extremeprog.com/mongoSitesApi.js?site=space"></script>
+    <script src="/js/angular.min.js" charset="utf-8"></script>
+    <script src="/js/angular-route.min.js"></script>
+    <!--<script src="/js/angular-sanitize.min.js"></script>-->
+    <script src="http://msa.trean.extremeprog.com/mongoSitesApi.angular.js?site=space"></script>
+
+    <script type="text/javascript" src="/js/spin.min.js"></script>
+    <script type="text/javascript" src="/js/angular-spinner.min.js"></script>
+    <script type="text/javascript" src="/js/angular-loading-spinner.js"></script>
+
+    <script src="/js/app.js" language="javascript" type="text/javascript"></script>
+
+    <script src="/js/model/user-model.js" language="javascript" type="text/javascript"></script>
+    <script src="/js/model/section-model.js" language="javascript" type="text/javascript"></script>
+    <script src="/js/model/subsection-model.js" language="javascript" type="text/javascript"></script>
+    <script src="/js/model/note-model.js" language="javascript" type="text/javascript"></script>
+
+    <script src="/js/controllers/main-controller.js" language="javascript" type="text/javascript"></script>
+    <script src="/js/controllers/tab-controller.js" language="javascript" type="text/javascript"></script>
+    <script src="/js/controllers/subtab-controller.js" language="javascript" type="text/javascript"></script>
+
+</head>
+<body ng-app="space">
+<div class="wrapper" ng-controller="MainCtrl" ng-init="initApp()">
+    <header class="header">
+        <div class="header__user">{{ user.email }}</div>
+        <div class="header__logout" ng-click="user.logout($event)">logout</div>
+    </header>
+
+    <div class="workspace" ng-controller="TabController as tab">
+
+        <div class="sections">
+             <span us-spinner="{radius:8, width:1, length: 4}"></span>
+            <ul class="sections__list js-sections">
+                <li class="sections__add"><span ng-click="addSection(user.email)">Add section</span></li>
+                <li class="sections__item js-li" ng-class="{ 'active': tab.isSet($index + 1) }" ng-repeat="(key, value) in data track by $index">
+                    <a href="#" ng-click="tab.setTab($index + 1)" ng-dblclick="updateSection($event, key, $index)" ng-focus="setTempValue($event)">{{ value.name }}</a>
+                    <div class="sections__delete js-delete" ng-click="removeSection(key, tab)">&#215;</div>
+                </li>
+            </ul>
+        </div>
+
+
+        <div ng-controller="SubTabController as subtab" class="subsections js-subsection" ng-repeat="(key, value) in data track by $index" ng-show="tab.isSet($index + 1)">
+            <!-- here will be list of subsections' tabs -->
+
+            <div class="subsections__wrapper">
+                <ul class="subsections__list js-ul">
+                    <li ng-repeat="subs in (items = (value.subsections | orderBy: 'create_at' ))" class="subsections__item js-li" ng-class="{ active: subtab.isSet($index + 1) }">
+                        <a href="#" ng-click="subtab.setTab($index + 1)" ng-dblclick="updateSubSection($event, subs.id, $index)" ng-focus="setTempValue($event)">{{ subs.name }}</a>
+                        <div class="subsections__delete js-delete" ng-click="removeSubSection(subs.id, subtab)">&#215;</div>
+                    </li>
+                </ul>
+                <button class="subsections__add" ng-click="addSubSection(user.email, key, subtab, $index, value.subsections.length)">+</button>
+            </div>
+
+            <!-- here will be content of subsection -->
+
+            <div class="subsections__note js-notearea-wrpr" ng-repeat="subt in value.subsections track by $index" ng-show="subtab.isSet($index + 1)">
+                <textarea class="js-notearea" ng-blur="clearUpdateNote($event, subt.id)" placeholder="Мои записи..." ng-focus="setTempValue($event); updateEditableNote($event, subt.id)">{{ subt.note }}</textarea>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="http://localhost:35729/livereload.js"></script>
+</body>
+</html>

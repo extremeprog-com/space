@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Space - Login</title>
+    <link rel="stylesheet" href="css/style.min.css">
+    <script src="http://msa.trean.extremeprog.com/mongoSitesApi.js?site=space"></script>
+    <script src="/js/angular.min.js" charset="utf-8"></script>
+    <script src="/js/angular-route.min.js"></script>
+    <script src="http://msa.trean.extremeprog.com/mongoSitesApi.angular.js?site=space"></script>
+
+    <script type="text/javascript" src="/js/spin.min.js"></script>
+    <script type="text/javascript" src="/js/angular-spinner.min.js"></script>
+    <script type="text/javascript" src="/js/angular-loading-spinner.js"></script>
+
+    <script src="/js/app.js" language="javascript" type="text/javascript"></script>
+
+    <script src="/js/model/section-model.js" language="javascript" type="text/javascript"></script>
+    <script src="/js/model/subsection-model.js" language="javascript" type="text/javascript"></script>
+    <script src="/js/model/note-model.js" language="javascript" type="text/javascript"></script>
+
+    <script src="/js/controllers/auth-controller.js"></script>
+</head>
+<body ng-app="space">
+<div class="wrapper wrapper_log" ng-controller="AuthCtrl">
+
+    <div class="login">
+        <form class="login__form" action="">
+            <div class="login__description">
+                <p>[GitGym Login]</p>
+                <a href="/register.html">Not registered yet?</a>
+            </div>
+            <input id="email" type="text" ng-model="user.email" placeholder="Login">
+            <input id="passwd" type="password" ng-model="user.passwd" placeholder="Password">
+
+            <button id="loginButton" ng-click="login(user.email, user.passwd)">Sign In</button>
+        </form>
+    </div>
+    <div class="copy">Copyright, 2016. Friend Inc.</div>
+</div>
+
+<script src="http://localhost:35729/livereload.js"></script>
+</body>
+</html>

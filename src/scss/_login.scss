@@ -1,0 +1,75 @@
+.login {
+    display: flex;
+    justify-content: space-between;
+    height: calc(100vh - 1.6em);
+    &__description {
+        margin: 0 0 1em;
+        position: relative;
+      &>p {
+          font-size: 1.5em;
+          font-weight: 600;
+      }
+      &>a {
+          color: #777777;
+          text-decoration: none;
+          position: absolute;
+          top: 0.8em;
+          right: 0;
+          &:hover {
+              text-decoration: underline;
+          }
+      }
+    }
+    &__form {
+        width: calc(44% - 8em);
+        margin: auto;
+        position: relative;
+
+    }
+    &__error {
+        display: none;
+        width: calc(100% - 2em);
+        padding: 1em;
+        border: 1px solid #ff0000;
+        border-radius: 8px;
+        color: #ff0000;
+        position: absolute;
+        top: -4em;
+
+    }
+    label {
+        color: #777777;
+      & > a {
+          color: #222222;
+      }
+    }
+    input[type="text"],
+    input[type="password"] {
+        width: calc(100% - 2em);
+        height: 2.3em;
+        margin-bottom: 1em;
+        padding: 3px 1em;
+        font-size: 1em;
+
+        background: transparent;
+        border-radius: 0;
+        border: 1px solid #777;
+        outline: none;
+        &:focus {
+            outline: none;
+            box-shadow: inset -2px -2px 3px 0 rgba(247, 137, 0, 0.3);
+            border-radius: 0;
+            border: 1px solid #9f9f9f;
+        }
+    }
+    input[type="checkbox"] {
+        margin-bottom: 1.5em;
+    }
+    button {
+        @include button;
+        width: 100%;
+        padding: 0.7rem 1rem;
+        font-size: 1.1em;
+    }
+}
+

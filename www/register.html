@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Space - Register</title>
+    <link rel="stylesheet" href="css/style.min.css">
+    <script src="http://msa.trean.extremeprog.com/mongoSitesApi.js?site=space"></script>
+    <script src="/js/angular.min.js" charset="utf-8"></script>
+    <script src="/js/angular-route.min.js"></script>
+    <!--<script src="/js/angular-sanitize.min.js"></script>-->
+    <script src="http://msa.trean.extremeprog.com/mongoSitesApi.angular.js?site=space"></script>
+
+    <script type="text/javascript" src="/js/spin.min.js"></script>
+    <script type="text/javascript" src="/js/angular-spinner.min.js"></script>
+    <script type="text/javascript" src="/js/angular-loading-spinner.js"></script>
+
+    <script src="/js/app.js" language="javascript" type="text/javascript"></script>
+    <script src="/js/model/section-model.js" language="javascript" type="text/javascript"></script>
+    <script src="/js/model/subsection-model.js" language="javascript" type="text/javascript"></script>
+    <script src="/js/model/note-model.js" language="javascript" type="text/javascript"></script>
+    <script src="/js/controllers/auth-controller.js"></script>
+</head>
+<body ng-app="space">
+<div class="wrapper wrapper_reg" ng-controller="AuthCtrl">
+
+    <div class="login">
+        <form class="login__form" action="">
+            <span id="error" class="login__error">{{ error }}</span>
+
+            <div class="login__description">
+                <p>[GitGym Registration]</p>
+                <a href="/login.html">Already have an account?</a>
+            </div>
+            <input type="text" id="email" type="text" ng-model="user.email" placeholder="Login *">
+            <input type="password" id="passwd" type="password" ng-model="user.passwd" placeholder="Password *">
+            <input type="password" id="passwd2" type="password" ng-model="user.passwd2" placeholder="Password *">
+            <label><input type="checkbox" name="accept" id="accept" checked> I agree with <a href="#" target="_blank" rell=""noopener>terms</a></label>
+
+            <button id="regButton" type="" ng-click="register(user.email, user.passwd)">Sign Up</button>
+        </form>
+    </div>
+    <div class="copy">Copyright, 2016. Friend Inc.</div>
+</div>
+
+<script src="http://localhost:35729/livereload.js"></script>
+</body>
+</html>

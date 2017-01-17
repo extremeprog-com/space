@@ -1,0 +1,5 @@
+.idea
+out
+node_modules
+bower_components
+containers/space/root/app

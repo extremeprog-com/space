@@ -1,0 +1,23 @@
+{
+  "name": "space",
+  "homepage": "https://github.com/extremeprog-com/space",
+  "authors": [
+    "Liudmila Vasnetsova <trean.mi@gmail.com>"
+  ],
+  "description": "Space notes for our deep minds' thoughts.",
+  "main": "index.html",
+  "keywords": [
+    "notes"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-route": "^1.6.1"
+  }
+}
