@@ -37,9 +37,9 @@
     <div class="workspace" ng-controller="TabController as tab">
 
         <div class="sections">
-             <span us-spinner="{radius:8, width:1, length: 4}"></span>
+             <!--<span us-spinner="{radius:8, width:1, length: 4}"></span>-->
             <ul class="sections__list js-sections">
-                <li class="sections__add"><span ng-click="addSection(user.email)">Add section</span></li>
+                <li class="sections__add" ng-click="addSection(user.email)">Add section</li>
                 <li class="sections__item js-li" ng-class="{ 'active': tab.isSet($index + 1) }" ng-repeat="(key, value) in data track by $index">
                     <a href="#" ng-click="tab.setTab($index + 1)" ng-dblclick="updateSection($event, key, $index)" ng-focus="setTempValue($event)">{{ value.name }}</a>
                     <div class="sections__delete js-delete" ng-click="removeSection(key, tab)">&#215;</div>
