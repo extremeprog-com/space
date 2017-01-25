@@ -3,3 +3,5 @@ out
 node_modules
 bower_components
 containers/space/root/app
+src/js/temp/
+www/js/temp/

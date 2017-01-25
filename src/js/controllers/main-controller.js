@@ -7,9 +7,6 @@
  */
 app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsection", "Note", function ($scope, $rootScope, User, Section, Subsection, Note) {
 
-  // window.scope = $scope;
-  // window.rootScope = $rootScope;
-
   $scope.user = new User(apply);
   $scope.model = {};
   $scope.data = {};
@@ -18,15 +15,6 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
   $scope.note = new Note(apply);
 
   var tempValue = null;
-  $scope.isLoading = false;
-  $scope.spinnerActive = false;
-
-  $scope.$watch("isLoading", function (loading) {
-    console.log("loading... " + loading);
-    $rootScope.spinnerActive = loading;
-  });
-
-  $rootScope.spinnerActive = $scope.spinnerActive;
 
 
   /**
@@ -42,8 +30,7 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
       .then(function (data) {
         return $scope.note.getData(user.email, data);
       })
-      .then(function (data) {
-        $scope.isLoading = false;
+      .then(function () {
         apply();
       });
   };
@@ -54,7 +41,6 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
    * @memberOf angular_module.app.MainCtrl
    */
   $scope.initApp = function () {
-    $scope.isLoading = true;
     $scope.user.getUser(function (user) {
       getData(user);
     });
@@ -110,10 +96,8 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
     newLi.focus();
 
     function save () {
-      $scope.isLoading = true;
       if (newLi.innerText === "") {
         newLi.remove();
-        $scope.isLoading = false;
       } else {
         newLi.remove();
 
@@ -138,8 +122,6 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
             return $scope.note.create(email, id2, sectionId, subSectionId);
           })
           .then(function () {
-            $scope.isLoading = false;
-            console.log("wait...");
             getData($scope.user);
           });
       }
@@ -185,11 +167,8 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
     newLi.focus();
 
     function save () {
-      $scope.isLoading = true;
-
       if (newLi.innerText === "") {
         newLi.remove();
-        $scope.isLoading = false;
       } else {
         newLi.remove();
         var id = Math.random().toString(36).substr(2);
@@ -201,7 +180,6 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
             return $scope.note.create(email, id, sectionId, subSectionId);
           })
           .then(function () {
-            $scope.isLoading = false;
             getData($scope.user);
           })
           .then(function (res) {
@@ -249,16 +227,11 @@ app.controller("MainCtrl", ["$scope", "$rootScope", "User", "Section", "Subsecti
       return;
     } else {
 
-      $scope.isLoading = true;
-
-      console.log("isLoding: " + $scope.isLoading);
       var text = noteArea.value;
       $scope.note.update(subsection, text, $scope.user.email)
         .then(function () {
-          $scope.isLoading = false;
           getData($scope.user);
         });
-
     }
   };
 

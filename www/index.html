@@ -8,12 +8,7 @@
     <script src="http://msa.trean.extremeprog.com/mongoSitesApi.js?site=space"></script>
     <script src="/js/angular.min.js" charset="utf-8"></script>
     <script src="/js/angular-route.min.js"></script>
-    <!--<script src="/js/angular-sanitize.min.js"></script>-->
     <script src="http://msa.trean.extremeprog.com/mongoSitesApi.angular.js?site=space"></script>
-
-    <script type="text/javascript" src="/js/spin.min.js"></script>
-    <script type="text/javascript" src="/js/angular-spinner.min.js"></script>
-    <script type="text/javascript" src="/js/angular-loading-spinner.js"></script>
 
     <script src="/js/app.js" language="javascript" type="text/javascript"></script>
 
@@ -37,7 +32,6 @@
     <div class="workspace" ng-controller="TabController as tab">
 
         <div class="sections">
-             <!--<span us-spinner="{radius:8, width:1, length: 4}"></span>-->
             <ul class="sections__list js-sections">
                 <li class="sections__add" ng-click="addSection(user.email)">Add section</li>
                 <li class="sections__item js-li" ng-class="{ 'active': tab.isSet($index + 1) }" ng-repeat="(key, value) in data track by $index">
